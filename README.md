@@ -1,5 +1,5 @@
 # CoviWeatherInfo
-A school project a few friends and I are working on.
+A **‼ WIP ‼️** school project a few friends and I are working on.
 
 # Aim
 To make an effective piece of software that can provide weather and Covid-19 information based on a user's location.
