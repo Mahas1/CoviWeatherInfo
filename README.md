@@ -31,10 +31,10 @@ This project aims to use the following dependencies
  - Requests
  - python-mysql-connector
 
-This list is not complete, and will be expanded according to progress to the script(s).
+This list is not complete, and will be expanded depending on changes to the script(s) and their implementation.
 
 # License
-This project is covered under the MIT License, for more information, refer [here](./LICENSE).
+This project is covered under the MIT License. For more information, refer [here](./LICENSE).
 
 # Credits
-Yet to be filled
+Credits ETA: Soon™
