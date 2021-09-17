@@ -33,6 +33,9 @@ This project aims to use the following dependencies
 
 This list is not complete, and will be expanded depending on changes to the script(s) and their implementation.
 
+# So what can it do as of now?
+ - It can tell you a joke.
+
 # License
 This project is covered under the MIT License. For more information, refer [here](./LICENSE).
 
