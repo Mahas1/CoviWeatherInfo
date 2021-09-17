@@ -19,6 +19,18 @@ Features in mind:
 blacklist_flags = ["nsfw", "religious", "political", "racist", "sexist", "explicit"]  # for personal reference
 
 
+"""Text colors and text formatting (markdown in python eta when)"""
+color_pink = '\033[95m'
+color_blue = '\033[94m'
+color_cyan = '\033[96m'
+color_green = '\033[92m'
+color_yellow = '\033[93m'
+color_red = '\033[91m'
+end_color_formatting = '\033[0m'
+format_bold = '\033[1m'
+format_underline = '\033[4m'
+
+
 def get_joke(categories: list = None, blacklist: list = None):
     categories_str = "+".join(categories) if categories else "any"
     blacklist_str = "+".join(blacklist) if blacklist else None
@@ -34,7 +46,7 @@ def get_joke(categories: list = None, blacklist: list = None):
 
     if response.get("type") == "twopart":  # jokes can be in two parts or one.
         setup, delivery = response.get("setup"), response.get("delivery")  # getting the variables from the dictionaey
-        joke = setup + "\n" + delivery
+        joke = f"{setup}\n{color_green}{delivery}{end_color_formatting}"
     else:
         joke = response.get("joke")
 
