@@ -64,7 +64,11 @@ def get_joke(categories: list = None, blacklist: list = None):
 
 assets_start_time = time.monotonic()
 print("Readying assets...")
-joke, joke_category = get_joke(blacklist=[])
+try:
+    joke, joke_category = get_joke(blacklist=[])
+except requests.ConnectionError:
+    print(f"{assets.color_red}Could not connect to the internet :({assets.end_color_formatting}")
+    sys.exit()
 time_now = time.monotonic()
 elapsed_time = round((time_now - assets_start_time), 2)
 print(f"{assets.color_green}Assets readied in {elapsed_time} seconds.{assets.end_color_formatting}\n")
