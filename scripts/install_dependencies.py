@@ -1,13 +1,13 @@
 import platform
 import subprocess
+import sys
 
 
 def install_deps():
     with open("deps_install_log.txt", "w") as file:
-        command = ["pip3", "install", "-r", "requirements.txt"]
-        if platform.system() == "Windows":
-            command[0] = "pip"
-        subprocess.call(command, stdout=file, shell=True)
+        command = [sys.executable, "-m", "pip", "install", "-r", "requirements.txt"]
+        subprocess.run(command, stdout=file)
+
     if platform.system() == "Windows":
         subprocess.call(["cls"], shell=True)
     else:

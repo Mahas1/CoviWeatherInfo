@@ -52,13 +52,15 @@ def get_joke(categories: list = None, blacklist: list = None):
     response = json.loads(response)  # string to dict conversion
 
     if response.get("type") == "twopart":  # jokes can be in two parts or one.
-        setup, delivery = response.get("setup"), response.get("delivery")  # getting the variables from the dictionaey
+        setup, delivery = response.get("setup"), response.get("delivery")  # getting the variables from the dictionary
         joke_text = f"{setup}\n{assets.color_pink}{delivery}{assets.end_color_formatting}"
     else:
         joke_text = response.get("joke")
 
     return joke_text, response.get("category")
 
+
+"""Actual code starts here"""
 
 assets_start_time = time.monotonic()
 print("Readying assets...")
@@ -70,5 +72,6 @@ except requests.ConnectionError:
 time_now = time.monotonic()
 elapsed_time = round((time_now - assets_start_time), 2)
 print(f"{assets.color_green}Assets readied in {elapsed_time} seconds.{assets.end_color_formatting}\n")
-# to be printed when the user exits
+
+# print this when user exits
 print(f"Here's a nice little {joke_category} joke for you!\n\n{joke}")
