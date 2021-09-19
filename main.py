@@ -21,23 +21,21 @@ from scripts.install_dependencies import install_deps
 try:
     import requests
     import googletrans
-except ModuleNotFoundError:
+except ModuleNotFoundError:  # if the modes do not exist, we install the dependencies
     print("Missing dependencies. Attempting to install them now...")
-    install_deps()
+    install_deps()  # calling the function that installs dependencies
     print(f"Installed dependencies. Install logs available in "
           f"{assets.color_green}deps_install_log.txt{assets.end_color_formatting}. "
           f"Please rerun this program.")
-    sys.exit(f"{assets.format_underline}Necessary dependencies were installed.{assets.end_color_formatting}")
+    sys.exit()
 
-blacklist_flags = ["nsfw", "religious", "political", "racist", "sexist", "explicit"]  # for personal reference
-
-version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")
+version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")  # python version
 if version <= 3.6:
     print(f"This program {assets.color_red}CAN NOT{assets.end_color_formatting} run in Python 3.6 and lower. "
           f"{assets.color_yellow}Python 3.7 or higher is recommended.{assets.end_color_formatting} "
           f"Your version of python is {assets.color_cyan}{version}{assets.end_color_formatting}.\n"
           f"{assets.color_red}Aborting...{assets.end_color_formatting}")
-    sys.exit("Please update your Python install.")
+    sys.exit("Please update your Python install.")  # formatted strings can't work in python 3.6 and older.
 
 
 def get_joke(categories: list = None, blacklist: list = None):
@@ -55,17 +53,17 @@ def get_joke(categories: list = None, blacklist: list = None):
 
     if response.get("type") == "twopart":  # jokes can be in two parts or one.
         setup, delivery = response.get("setup"), response.get("delivery")  # getting the variables from the dictionaey
-        joke = f"{setup}\n{assets.color_pink}{delivery}{assets.end_color_formatting}"
+        joke_text = f"{setup}\n{assets.color_pink}{delivery}{assets.end_color_formatting}"
     else:
-        joke = response.get("joke")
+        joke_text = response.get("joke")
 
-    return joke, response.get("category")
+    return joke_text, response.get("category")
 
 
 assets_start_time = time.monotonic()
 print("Readying assets...")
 try:
-    joke, joke_category = get_joke(blacklist=[])
+    joke, joke_category = get_joke()
 except requests.ConnectionError:
     print(f"{assets.color_red}Could not connect to the internet :({assets.end_color_formatting}")
     sys.exit()
