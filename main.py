@@ -1,16 +1,3 @@
-"""
-Features in mind:
-    - covid info
-    - weather info
-    - easter egg (hopefully)
-    - translation using googletrans
-    - test connection speed
-    - total rundown of system info (additional feature that is totally useless, but cool nonetheless)
-    - joke at the end ----------- (groundwork has been laid)
-    - make a database with a table for name-location for weather and covid info,
-        and a table for name-language for translation
-"""
-
 import json
 import sys
 import time
@@ -21,13 +8,23 @@ from scripts.install_dependencies import install_deps
 try:
     import requests
     import googletrans
+    import speedtest
 except ModuleNotFoundError:  # if the modes do not exist, we install the dependencies
     print("Missing dependencies. Attempting to install them now...")
     install_deps()  # calling the function that installs dependencies
-    print(f"Installed dependencies. Install logs available in "
-          f"{assets.color_green}deps_install_log.txt{assets.end_color_formatting}. "
-          f"Please rerun this program.")
-    sys.exit()
+    with open("deps_error_log.txt", "r") as errorFile:
+        string = errorFile.read()
+        if string != "":
+            print(f"{assets.color_red}Errors have occurred while installing dependencies.{assets.end_color_formatting}")
+        else:
+            print(f"{assets.color_green}No errors have occurred while installing dependencies."
+                  f"{assets.end_color_formatting}")
+    print(f"Install logs available in {assets.color_green}deps_install_log.txt{assets.end_color_formatting}.\n"
+          f"Error logs available in {assets.color_green}deps_error_log.txt{assets.end_color_formatting}\n")
+
+import requests
+import googletrans
+from scripts.test_speed import test_speed
 
 version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")  # python version
 if version <= 3.6:
@@ -60,6 +57,37 @@ def get_joke(categories: list = None, blacklist: list = None):
     return joke_text, response.get("category")
 
 
+def exit_program(joke_text=None, joke_category=None):
+    if not joke_text or not joke_category:
+        joke_text, joke_category = get_joke()
+    print(f"Here's a {assets.color_blue}{joke_category}{assets.end_color_formatting} joke for you!\n")
+    print(joke_text)
+    sys.exit()
+
+
+def speed_test():
+    list_result = test_speed()
+    print(f"Ping: {list_result[0]}ms")
+    print(f"Upload: {list_result[1]}Mbps")
+    print(f"Download: {list_result[2]}Mbps")
+    print(f"Server Name: {list_result[3]}")
+    print(f"Server Location: {list_result[4]}")
+    print(f"Sent: {list_result[5]}MB | Recieved: {list_result[6]}MB")
+    print("\n")
+
+
+def user_input():
+    print("Enter your choice:\n"
+          "1. Test connection speed\n"
+          "2. Exit")
+    user_i = input(f"{assets.color_green}> {assets.end_color_formatting}")
+    if user_i == "1":
+        speed_test()
+        user_input()
+    if user_i == "2":
+        exit_program(joke_category=joke_category, joke_text=joke)
+
+
 """Actual code starts here"""
 
 assets_start_time = time.monotonic()
@@ -73,5 +101,5 @@ time_now = time.monotonic()
 elapsed_time = round((time_now - assets_start_time), 2)
 print(f"{assets.color_green}Assets readied in {elapsed_time} seconds.{assets.end_color_formatting}\n")
 
-# print this when user exits
-print(f"Here's a nice little {joke_category} joke for you!\n\n{joke}")
+
+user_input()

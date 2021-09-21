@@ -9,3 +9,17 @@ format_bold = '\033[1m'
 format_underline = '\033[4m'
 
 blacklist_flags = ["nsfw", "religious", "political", "racist", "sexist", "explicit"]  # for personal reference
+
+
+"""
+Features in mind:
+    - covid info
+    - weather info
+    - easter egg (hopefully)
+    - translation using googletrans
+    - test connection speed
+    - total rundown of system info (additional feature that is totally useless, but cool nonetheless)
+    - joke at the end ----------- (groundwork has been laid)
+    - make a database with a table for name-location for weather and covid info,
+        and a table for name-language for translation
+"""
