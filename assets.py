@@ -17,7 +17,7 @@ Features in mind:
     - weather info
     - easter egg (hopefully)
     - translation using googletrans
-    - test connection speed
+    - test connection speed ----------- (groundwork has been laid)
     - total rundown of system info (additional feature that is totally useless, but cool nonetheless)
     - joke at the end ----------- (groundwork has been laid)
     - make a database with a table for name-location for weather and covid info,
