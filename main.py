@@ -9,6 +9,7 @@ try:
     import requests
     import googletrans
     import speedtest
+    import psutil
 except ModuleNotFoundError:  # if the modes do not exist, we install the dependencies
     print("Missing dependencies. Attempting to install them now...")
     install_deps()  # calling the function that installs dependencies
@@ -23,8 +24,8 @@ except ModuleNotFoundError:  # if the modes do not exist, we install the depende
           f"Error logs available in {assets.color_green}deps_error_log.txt{assets.end_color_formatting}\n")
 
 import requests
-import googletrans
 from scripts.test_speed import test_speed
+from scripts.system_info import hostinfo
 
 version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")  # python version
 if version <= 3.6:
@@ -36,7 +37,7 @@ if version <= 3.6:
 
 
 def get_joke(categories: list = None, blacklist: list = None):
-    categories_str = "+".join(categories) if categories else "any"
+    categories_str = "+".join(categories) if categories else "any"  # yes I love ternary operators, how did you know?
     blacklist_str = "+".join(blacklist) if blacklist else None
 
     url = f"https://v2.jokeapi.dev/joke/{categories_str}"
@@ -67,24 +68,29 @@ def exit_program(joke_text=None, joke_category=None):
 
 def speed_test():
     list_result = test_speed()
-    print(f"Ping: {list_result[0]}ms")
-    print(f"Upload: {list_result[1]}Mbps")
-    print(f"Download: {list_result[2]}Mbps")
-    print(f"Server Name: {list_result[3]}")
-    print(f"Server Location: {list_result[4]}")
-    print(f"Sent: {list_result[5]}MB | Recieved: {list_result[6]}MB")
+    print(f"Ping: {assets.color_cyan}{list_result[0]}ms{assets.end_color_formatting}")
+    print(f"Upload: {assets.color_cyan}{list_result[1]}Mbps{assets.end_color_formatting}")
+    print(f"Download: {assets.color_cyan}{list_result[2]}Mbps{assets.end_color_formatting}")
+    print(f"Server Name: {assets.color_cyan}{list_result[3]}{assets.end_color_formatting}")
+    print(f"Server Location: {assets.color_cyan}{list_result[4]}{assets.end_color_formatting}")
+    print(f"Sent: {assets.color_pink}{list_result[5]}MB{assets.end_color_formatting} | "
+          f"Recieved: {assets.color_pink}{list_result[6]}MB{assets.end_color_formatting}")
     print("\n")
 
 
 def user_input():
     print("Enter your choice:\n"
           "1. Test connection speed\n"
-          "2. Exit")
+          "2. System Information\n"
+          "3. Exit")
     user_i = input(f"{assets.color_green}> {assets.end_color_formatting}")
     if user_i == "1":
         speed_test()
         user_input()
     if user_i == "2":
+        hostinfo()
+        user_input()
+    if user_i == "3":
         exit_program(joke_category=joke_category, joke_text=joke)
 
 
@@ -100,6 +106,5 @@ except requests.ConnectionError:
 time_now = time.monotonic()
 elapsed_time = round((time_now - assets_start_time), 2)
 print(f"{assets.color_green}Assets readied in {elapsed_time} seconds.{assets.end_color_formatting}\n")
-
 
 user_input()
