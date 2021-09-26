@@ -2,3 +2,4 @@ requests~=2.26.0
 googletrans~=3.1.0a0
 speedtest-cli
 psutil~=5.8.0
+python-aiml

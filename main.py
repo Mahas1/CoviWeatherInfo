@@ -10,22 +10,32 @@ try:
     import googletrans
     import speedtest
     import psutil
+    import aiml
 except ModuleNotFoundError:  # if the modes do not exist, we install the dependencies
     print("Missing dependencies. Attempting to install them now...")
     install_deps()  # calling the function that installs dependencies
     with open("deps_error_log.txt", "r") as errorFile:
         string = errorFile.read()
         if string != "":
-            print(f"{assets.color_red}Errors have occurred while installing dependencies.{assets.end_color_formatting}")
+            print(f"{assets.color_red}Errors or warnings have occurred while installing dependencies. "
+                  f"Please check the error log.{assets.end_color_formatting}")
         else:
             print(f"{assets.color_green}No errors have occurred while installing dependencies."
                   f"{assets.end_color_formatting}")
     print(f"Install logs available in {assets.color_green}deps_install_log.txt{assets.end_color_formatting}.\n"
-          f"Error logs available in {assets.color_green}deps_error_log.txt{assets.end_color_formatting}\n")
+          f"Error logs available in {assets.color_green}deps_error_log.txt{assets.end_color_formatting}\n"
+          f"Please restart this program for changes to take effect.")
+    exit(0)
 
 import requests
 from scripts.test_speed import test_speed
 from scripts.system_info import hostinfo
+from scripts import botchat
+import json
+
+with open("config.json", "r") as configFile:
+    project_config = json.load(configFile)
+
 
 version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")  # python version
 if version <= 3.6:
@@ -68,14 +78,23 @@ def exit_program(joke_text=None, joke_category=None):
 
 def speed_test():
     list_result = test_speed()
-    print(f"Ping: {assets.color_cyan}{list_result[0]}ms{assets.end_color_formatting}")
-    print(f"Upload: {assets.color_cyan}{list_result[1]}Mbps{assets.end_color_formatting}")
-    print(f"Download: {assets.color_cyan}{list_result[2]}Mbps{assets.end_color_formatting}")
+    print(f"Ping: {assets.color_cyan}{list_result[0]} ms{assets.end_color_formatting}")
+    print(f"Upload: {assets.color_cyan}{list_result[1]} Mbps{assets.end_color_formatting}")
+    print(f"Download: {assets.color_cyan}{list_result[2]} Mbps{assets.end_color_formatting}")
     print(f"Server Name: {assets.color_cyan}{list_result[3]}{assets.end_color_formatting}")
     print(f"Server Location: {assets.color_cyan}{list_result[4]}{assets.end_color_formatting}")
-    print(f"Sent: {assets.color_pink}{list_result[5]}MB{assets.end_color_formatting} | "
-          f"Recieved: {assets.color_pink}{list_result[6]}MB{assets.end_color_formatting}")
+    print(f"Sent: {assets.color_pink}{list_result[5]} MB{assets.end_color_formatting} | "
+          f"Recieved: {assets.color_pink}{list_result[6]} MB{assets.end_color_formatting}")
     print("\n")
+
+
+def chat_respond():
+    while True:
+        query = input(f"{assets.color_cyan}> {assets.end_color_formatting}")
+        if query.lower() in ["exit", "quit"]:
+            print("Bye!\n")
+            break
+        botchat.respond(query)
 
 
 def user_input():
@@ -92,6 +111,14 @@ def user_input():
         user_input()
     if user_i == "3":
         exit_program(joke_category=joke_category, joke_text=joke)
+    if user_i == project_config.get("botchat_secret_character"):
+        print(f"{assets.color_yellow}You have found BotChat! type \"exit\" to exit.{assets.end_color_formatting}")
+        print("Hello! What can I call you?")
+        chat_respond()
+        user_input()
+    else:
+        print("Unknown choice. Try again.")
+        user_input()
 
 
 """Actual code starts here"""
