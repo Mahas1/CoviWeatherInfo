@@ -1,5 +1,6 @@
-import aiml
 import json
+
+import aiml
 
 with open("config.json", "r") as configFile:
     config = json.load(configFile)

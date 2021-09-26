@@ -1,4 +1,3 @@
-import json
 import sys
 import time
 
@@ -35,7 +34,6 @@ import json
 
 with open("config.json", "r") as configFile:
     project_config = json.load(configFile)
-
 
 version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")  # python version
 if version <= 3.6:

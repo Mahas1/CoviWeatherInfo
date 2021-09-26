@@ -10,7 +10,6 @@ format_underline = '\033[4m'
 
 blacklist_flags = ["nsfw", "religious", "political", "racist", "sexist", "explicit"]  # for personal reference
 
-
 """
 Features in mind:
     - covid info

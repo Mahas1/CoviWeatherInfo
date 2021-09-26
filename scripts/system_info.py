@@ -1,7 +1,9 @@
-import platform
-import psutil
-import assets
 import os
+import platform
+
+import psutil
+
+import assets
 
 
 def hostinfo():
