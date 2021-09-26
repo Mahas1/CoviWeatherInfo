@@ -1,9 +1,5 @@
-import json
-
 import aiml
 
-with open("config.json", "r") as configFile:
-    config = json.load(configFile)
 chatBot = aiml.Kernel()
 # Already have a brain - load it
 chatBot.bootstrap(brainFile="scripts/brain.brn")
