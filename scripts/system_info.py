@@ -1,12 +1,21 @@
 import os
 import platform
+import subprocess
 
 import psutil
 
 import assets
 
 
+def clear_screen():
+    if platform.system() == "Windows":
+        subprocess.call(["cls"], shell=True)
+    else:
+        subprocess.call(["clear"], shell=True)
+
+
 def hostinfo():
+    clear_screen()
     system = platform.uname()
     cpu_usage = psutil.cpu_percent()
     memstats = psutil.virtual_memory()

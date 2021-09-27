@@ -113,7 +113,6 @@ def chat_respond():
 
 
 def clear_screen():
-    print(platform.system())
     if platform.system() == "Windows":
         subprocess.call(["cls"], shell=True)
     else:
