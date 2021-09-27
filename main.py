@@ -3,8 +3,15 @@ import sys
 import time
 
 import assets
-from scripts.install_dependencies import install_deps
-
+from scripts import install_dependencies
+version = float(sys.version[:3])
+if version <= 3.6:
+    print(("This program {red}CAN NOT{end} run in Python 3.6 and lower. "
+           "{yellow}Python 3.7 or higher is recommended.{end} "
+           "Your version of python is {cyan}{version}{end}.\n"
+           "{red}Aborting...{end}").format(red=assets.color_red, end=assets.end_color_formatting,
+                                           yellow=assets.color_yellow, cyan=assets.color_cyan, version=version))
+    exit(1)  # formatted strings can't work in python 3.6 and older, and also some modules may need 3.7+
 try:
     import requests
     import googletrans
@@ -13,7 +20,7 @@ try:
     import aiml
 except ModuleNotFoundError:  # if the modes do not exist, we install the dependencies
     print("Missing dependencies. Attempting to install them now...")
-    install_deps()  # calling the function that installs dependencies
+    install_dependencies.install_deps()  # calling the function that installs dependencies
     with open("deps_error_log.txt", "r") as errorFile:
         string = errorFile.read()
         if string != "":
@@ -32,40 +39,23 @@ from scripts.test_speed import test_speed
 from scripts.system_info import hostinfo
 from scripts import botchat
 import json
-from urllib.parse import quote as encode
 import subprocess
 
 with open("config.json", "r") as configFile:
     project_config = json.load(configFile)
 
-version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")  # python version
-if version <= 3.6:
-    print(f"This program {assets.color_red}CAN NOT{assets.end_color_formatting} run in Python 3.6 and lower. "
-          f"{assets.color_yellow}Python 3.7 or higher is recommended.{assets.end_color_formatting} "
-          f"Your version of python is {assets.color_cyan}{version}{assets.end_color_formatting}.\n"
-          f"{assets.color_red}Aborting...{assets.end_color_formatting}")
-    sys.exit("Please update your Python install.")  # formatted strings can't work in python 3.6 and older,
-    # along with python-aiml which needs python3
 
-
-def get_dad_joke(search_term: str = None):
+def get_dad_joke():
     url = "https://icanhazdadjoke.com/"
-    if search_term:
-        url += f"search?term={encode(search_term)}"
     headers = {"Accept": "application/json"}
     with requests.get(url, headers=headers) as response:
         response_content = json.loads(response.content)
-    if search_term:
-        for joke_entry in response_content.get("results"):
-            print(joke_entry.get("joke"))
-    else:
-        # print(response_content.get("joke"))
-        return response_content.get("joke"), "Dad"
+    return response_content.get("joke"), "Dad"
 
 
 def get_joke_jokeapi(categories: list = None, blacklist: list = None):
     # this function is in case you want dark jokes.
-    # The default joke provider will be the dad joke one (for obvious reasons)
+    # The default joke provider will be the dad joke one (for obvious reaso ns)
 
     categories_str = "+".join(categories) if categories else "any"  # yes I love ternary operators, how did you know?
     blacklist_str = "+".join(blacklist) if blacklist else None
