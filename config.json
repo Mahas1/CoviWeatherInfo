@@ -1,5 +1,6 @@
 {
   "botchat_secret_character": "sause",
   "weather_api_key": "to be filled",
-  "covid_api_key": "to be filled"
+  "covid_api_key": "to be filled",
+  "dad_jokes": true
 }

@@ -1,3 +1,4 @@
+import platform
 import sys
 import time
 
@@ -31,6 +32,8 @@ from scripts.test_speed import test_speed
 from scripts.system_info import hostinfo
 from scripts import botchat
 import json
+from urllib.parse import quote as encode
+import subprocess
 
 with open("config.json", "r") as configFile:
     project_config = json.load(configFile)
@@ -41,10 +44,29 @@ if version <= 3.6:
           f"{assets.color_yellow}Python 3.7 or higher is recommended.{assets.end_color_formatting} "
           f"Your version of python is {assets.color_cyan}{version}{assets.end_color_formatting}.\n"
           f"{assets.color_red}Aborting...{assets.end_color_formatting}")
-    sys.exit("Please update your Python install.")  # formatted strings can't work in python 3.6 and older.
+    sys.exit("Please update your Python install.")  # formatted strings can't work in python 3.6 and older,
+    # along with python-aiml which needs python3
 
 
-def get_joke(categories: list = None, blacklist: list = None):
+def get_dad_joke(search_term: str = None):
+    url = "https://icanhazdadjoke.com/"
+    if search_term:
+        url += f"search?term={encode(search_term)}"
+    headers = {"Accept": "application/json"}
+    with requests.get(url, headers=headers) as response:
+        response_content = json.loads(response.content)
+    if search_term:
+        for joke_entry in response_content.get("results"):
+            print(joke_entry.get("joke"))
+    else:
+        # print(response_content.get("joke"))
+        return response_content.get("joke"), "Dad"
+
+
+def get_joke_jokeapi(categories: list = None, blacklist: list = None):
+    # this function is in case you want dark jokes.
+    # The default joke provider will be the dad joke one (for obvious reasons)
+
     categories_str = "+".join(categories) if categories else "any"  # yes I love ternary operators, how did you know?
     blacklist_str = "+".join(blacklist) if blacklist else None
 
@@ -67,15 +89,19 @@ def get_joke(categories: list = None, blacklist: list = None):
 
 
 def exit_program(joke_text=None, joke_category=None):
+    clear_screen()
     if not joke_text or not joke_category:
-        joke_text, joke_category = get_joke()
+        joke_text, joke_category = get_joke_jokeapi()
     print(f"Here's a {assets.color_blue}{joke_category}{assets.end_color_formatting} joke for you!\n")
     print(joke_text)
     sys.exit()
 
 
 def speed_test():
+    clear_screen()
     list_result = test_speed()
+    if not list_result[-1].isnumeric():
+        return print(list_result[-1])
     print(f"Ping: {assets.color_cyan}{list_result[0]} ms{assets.end_color_formatting}")
     print(f"Upload: {assets.color_cyan}{list_result[1]} Mbps{assets.end_color_formatting}")
     print(f"Download: {assets.color_cyan}{list_result[2]} Mbps{assets.end_color_formatting}")
@@ -93,6 +119,14 @@ def chat_respond():
             print("Bye!\n")
             break
         botchat.respond(query)
+
+
+def clear_screen():
+    print(platform.system())
+    if platform.system() == "Windows":
+        subprocess.call(["cls"], shell=True)
+    else:
+        subprocess.call(["clear"], shell=True)
 
 
 def user_input():
@@ -114,6 +148,8 @@ def user_input():
         print("Hello! What can I call you?")
         chat_respond()
         user_input()
+    if user_i == "test":
+        get_dad_joke()
     else:
         print("Unknown choice. Try again.")
         user_input()
@@ -124,12 +160,22 @@ def user_input():
 assets_start_time = time.monotonic()
 print("Readying assets...")
 try:
-    joke, joke_category = get_joke()
-except requests.ConnectionError:
-    print(f"{assets.color_red}Could not connect to the internet :({assets.end_color_formatting}")
-    sys.exit()
+    speedtest.Speedtest()  # initializing sample speedtest object to see if there is a network connection
+    if not project_config.get("dad_jokes"):
+        joke, joke_category = get_joke_jokeapi()
+    else:
+        joke, joke_category = get_dad_joke()
+except Exception as e:
+    if isinstance(e, requests.ConnectionError) or isinstance(e, speedtest.ConfigRetrievalError):
+        print(f"{assets.color_red}Could not connect to the internet :({assets.end_color_formatting}")
+        sys.exit()
+    else:
+        print(f"{assets.color_red}{assets.format_underline}An Exception occurred: {assets.format_bold}{str(e)}"
+              f"{assets.end_color_formatting}{assets.end_color_formatting}{assets.end_color_formatting}")
+        exit(0)
 time_now = time.monotonic()
 elapsed_time = round((time_now - assets_start_time), 2)
+clear_screen()
 print(f"{assets.color_green}Assets readied in {elapsed_time} seconds.{assets.end_color_formatting}\n")
 
 user_input()  # asking for input
