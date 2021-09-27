@@ -85,7 +85,7 @@ def exit_program(joke_text=None, joke_category=None):
         joke_text, joke_category = get_joke_jokeapi()
     print(f"Here's a {assets.color_blue}{joke_category}{assets.end_color_formatting} joke for you!\n")
     print(joke_text)
-    sys.exit()
+    sys.exit("Bye!")
 
 
 def speed_test():
