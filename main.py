@@ -4,6 +4,7 @@ import time
 
 import assets
 from scripts import install_dependencies
+
 version = float(sys.version[:3])
 if version <= 3.6:
     print(("This program {red}CAN NOT{end} run in Python 3.6 and lower. "
