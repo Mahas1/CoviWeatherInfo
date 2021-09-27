@@ -132,4 +132,4 @@ time_now = time.monotonic()
 elapsed_time = round((time_now - assets_start_time), 2)
 print(f"{assets.color_green}Assets readied in {elapsed_time} seconds.{assets.end_color_formatting}\n")
 
-user_input()
+user_input()  # asking for input
