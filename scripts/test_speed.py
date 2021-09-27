@@ -6,9 +6,9 @@ def test_speed():
         speedtest = Speedtest()
     except:
         return 0, 0, 0, 0, 0, 0, 0, "Could not connect to the speedtest server. Please check your network connection.\n"
-    print("Testing Download...")
+    print("Testing Download...", end="\r")
     speedtest.download()
-    print("Testing Upload...")
+    print("Testing Upload...", end="\r")
     speedtest.upload()
     result_dict = speedtest.results.dict()
     download = round((result_dict.get("download") / 1000000), 2)
