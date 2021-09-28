@@ -1,4 +1,6 @@
+import json
 import platform
+import subprocess
 import sys
 import time
 
@@ -25,7 +27,7 @@ except ModuleNotFoundError:  # if the modes do not exist, we install the depende
     with open("deps_error_log.txt", "r") as errorFile:
         string = errorFile.read()
         if string != "":
-            print(f"{assets.color_red}Errors or warnings have occurred while installing dependencies. "
+            print(f"{assets.color_red}Errors have occurred while installing dependencies. "
                   f"Please check the error log.{assets.end_color_formatting}")
         else:
             print(f"{assets.color_green}No errors have occurred while installing dependencies."
@@ -39,8 +41,6 @@ import requests
 from scripts.test_speed import test_speed
 from scripts.system_info import hostinfo
 from scripts import botchat
-import json
-import subprocess
 
 with open("config.json", "r") as configFile:
     project_config = json.load(configFile)
