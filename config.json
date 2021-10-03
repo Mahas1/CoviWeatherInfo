@@ -2,5 +2,11 @@
   "botchat_secret_character": "sause",
   "weather_api_key": "to be filled",
   "covid_api_key": "to be filled",
-  "dad_jokes": true
+  "dad_jokes": true,
+
+  "myql_hostname": "localhost",
+  "mysql_hostport": "3306",
+  "mysql_username": "username",
+  "mysql_password": "password",
+  "mysql_dbname": "dbname"
 }

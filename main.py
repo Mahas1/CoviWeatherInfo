@@ -21,6 +21,7 @@ try:
     import speedtest
     import psutil
     import aiml
+    import mysql
 except ModuleNotFoundError:  # if the modes do not exist, we install the dependencies
     print("Missing dependencies. Attempting to install them now...")
     install_dependencies.install_deps()  # calling the function that installs dependencies
@@ -41,6 +42,7 @@ import requests
 from scripts.test_speed import test_speed
 from scripts.system_info import hostinfo
 from scripts import botchat
+import sql_functions
 
 with open("config.json", "r") as configFile:
     project_config = json.load(configFile)
@@ -85,7 +87,8 @@ def exit_program(joke_text=None, joke_category=None):
         joke_text, joke_category = get_joke_jokeapi()
     print(f"Here's a {assets.color_blue}{joke_category}{assets.end_color_formatting} joke for you!\n")
     print(joke_text)
-    sys.exit("Bye!")
+    print(f"\n{assets.color_pink}Bye!{assets.end_color_formatting}")
+    exit(0)
 
 
 def speed_test():
@@ -123,23 +126,37 @@ def user_input():
     print("Enter your choice:\n"
           "1. Test connection speed\n"
           "2. System Information\n"
-          "3. Exit")
+          "3. Add your location to database\n"
+          "4. Remove your location from database\n"
+          "5. Exit")
     user_i = input(f"{assets.color_green}> {assets.end_color_formatting}")
     if user_i == "1":
+        clear_screen()
         speed_test()
         user_input()
-    if user_i == "2":
+    elif user_i == "2":
+        clear_screen()
         hostinfo()
         user_input()
-    if user_i == "3":
+    elif user_i == "3":
+        clear_screen()
+        sql_functions.insert_location()
+        user_input()
+    elif user_i == "4":
+        clear_screen()
+        sql_functions.remove_location()
+        user_input()
+    elif user_i == "5":
         exit_program(joke_category=joke_category, joke_text=joke)
-    if user_i == project_config.get("botchat_secret_character"):
+    elif user_i == project_config.get("botchat_secret_character"):
         print(f"{assets.color_yellow}You have found BotChat! type \"exit\" to exit.{assets.end_color_formatting}")
         print("Hello! What can I call you?")
         chat_respond()
         user_input()
-    if user_i == "test":
-        get_dad_joke()
+    elif user_i == "pika":
+        clear_screen()
+        print(assets.pikachu)
+        user_input()
     else:
         print("Unknown choice. Try again.")
         user_input()
