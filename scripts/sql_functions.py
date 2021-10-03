@@ -11,18 +11,21 @@ port = config.get("mysql_hostport")
 username = config.get("mysql_username")
 password = config.get("mysql_password")
 database = config.get("mysql_dbname")
-
-connection = Sql.connect(
-    host=host,
-    port=port,
-    user=username,
-    passwd=password,
-    database=database,
-    autocommit=True
-)
+try:
+    connection = Sql.connect(
+        host=host,
+        port=port,
+        user=username,
+        passwd=password,
+        database=database,
+        autocommit=True
+    )
+except Sql.ProgrammingError:
+    print(f"{assets.color_red}COULD NOT CONNECT TO DATABASE.{assets.end_color_formatting}")
+    exit(1)
 
 if connection.is_connected():
-    print("Connected successfully!")
+    print("Connected to database successfully!")
 
 cursor = connection.cursor(buffered=True)
 
@@ -41,7 +44,6 @@ cursor = connection.cursor(buffered=True)
 def get_locations():
     cursor.execute("SELECT * FROM locations;")
     response = cursor.fetchall()
-    print(response)
     dictionary = {}
     for entry in response:
         dictionary[entry[0]] = entry[1]
@@ -51,6 +53,7 @@ def get_locations():
 def insert_location():
     name = input(f"{assets.color_green}enter name: {assets.end_color_formatting}")
     location = input("enter location: ")
+    cursor.execute(f"DELETE FROM locations WHERE name = '{name}'")  # deleting already existing entry
     cursor.execute(f"INSERT INTO locations VALUES('{name}', '{location}')")
     print(f"{assets.color_green}Done!\n{assets.end_color_formatting}")
 

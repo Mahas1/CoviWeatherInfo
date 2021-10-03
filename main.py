@@ -41,8 +41,7 @@ except ModuleNotFoundError:  # if the modes do not exist, we install the depende
 import requests
 from scripts.test_speed import test_speed
 from scripts.system_info import hostinfo
-from scripts import botchat
-import sql_functions
+from scripts import botchat, sql_functions
 
 with open("config.json", "r") as configFile:
     project_config = json.load(configFile)
