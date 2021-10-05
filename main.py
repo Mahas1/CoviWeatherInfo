@@ -7,15 +7,16 @@ import time
 import assets
 from scripts import install_dependencies
 
-version = float(sys.version[:3])
 if sys.version_info.major < 3 and sys.version_info.minor < 7:
     print(("This program {red}CAN NOT{end} run in Python 3.6 and lower. "
            "{yellow}Python 3.8 or higher is recommended.{end} "
            "Your version of python is {cyan}{version}{end}.\n"
-           "{red}Aborting...{end}").format(red=assets.color_red, end=assets.end_color_formatting,
-                                           yellow=assets.color_yellow, cyan=assets.color_cyan,
-                                           version=f"{sys.version_info.major}."
-                                                   f"{sys.version_info.minor}.{sys.version_info.micro}"))
+           "{red}Aborting...{end}").format(
+        red=assets.color_red,
+        end=assets.end_color_formatting,
+        yellow=assets.color_yellow,
+        cyan=assets.color_cyan,
+        version=f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"))
     exit(1)  # formatted strings can't work in python 3.6 and older, and also some modules may need 3.7+
 try:
     import requests
