@@ -130,7 +130,8 @@ def user_input():
           "2. System Information\n"
           "3. Add your location to database\n"
           "4. Remove your location from database\n"
-          "5. Exit")
+          "5. Find your location from database\n"
+          "6. Exit")
     user_i = input(f"{assets.color_green}> {assets.end_color_formatting}")
     if user_i == "1":
         clear_screen()
@@ -149,6 +150,10 @@ def user_input():
         sql_functions.remove_location()
         user_input()
     elif user_i == "5":
+        clear_screen()
+        sql_functions.retrieve_location()
+        user_input()
+    elif user_i == "6":
         exit_program(joke_category=joke_category, joke_text=joke)
     elif user_i == project_config.get("botchat_secret_character"):
         print(f"{assets.color_yellow}You have found BotChat! type \"exit\" to exit.{assets.end_color_formatting}")
@@ -177,6 +182,8 @@ try:
 except Exception as e:
     if isinstance(e, requests.ConnectionError) or isinstance(e, speedtest.ConfigRetrievalError):
         print(f"{assets.color_red}Could not connect to the internet :({assets.end_color_formatting}")
+        if sys.platform.lower() == "darwin":
+            print("You seem to be on macOS. Are you sure you installed the SSL certificates?")
         sys.exit()
     else:
         print(f"{assets.color_red}{assets.format_underline}An Exception occurred: {assets.format_bold}{str(e)}"

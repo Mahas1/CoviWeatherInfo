@@ -1,7 +1,8 @@
-import time
-import assets
-import mysql.connector as Sql
 import json
+
+import mysql.connector as Sql
+
+import assets
 
 with open("config.json", "r") as configFile:
     config = json.load(configFile)
@@ -20,8 +21,9 @@ try:
         database=database,
         autocommit=True
     )
-except Sql.ProgrammingError:
-    print(f"{assets.color_red}COULD NOT CONNECT TO DATABASE.{assets.end_color_formatting}")
+except Exception as e:
+    print(f"An error occured: {str(e)}")
+    print(f"{assets.color_red}COULD NOT CONNECT TO DATABASE. ABORTING...{assets.end_color_formatting}")
     exit(1)
 
 if connection.is_connected():
@@ -51,7 +53,7 @@ def get_locations():
 
 
 def insert_location():
-    name = input(f"{assets.color_green}enter name: {assets.end_color_formatting}")
+    name = input(f"{assets.color_green}Enter your name: {assets.end_color_formatting}")
     location = input("enter location: ")
     cursor.execute(f"DELETE FROM locations WHERE name = '{name}'")  # deleting already existing entry
     cursor.execute(f"INSERT INTO locations VALUES('{name}', '{location}')")
@@ -59,6 +61,17 @@ def insert_location():
 
 
 def remove_location():
-    name = input(f"{assets.color_green}enter your name: {assets.end_color_formatting}")
+    name = input(f"{assets.color_green}Enter your name: {assets.end_color_formatting}")
     cursor.execute(f"DELETE FROM locations WHERE name = '{name}'")
     print(f"{assets.color_green}Done!\n{assets.end_color_formatting}")
+
+
+def retrieve_location():
+    name = input(f"{assets.color_green}Enter your name: {assets.end_color_formatting}")
+    print("\n")
+    cursor.execute(f"SELECT location FROM locations WHERE name = '{name}'")
+    result = (cursor.fetchall())
+    if len(result) > 0:
+        print(result[0][0], "\n")
+    else:
+        print("No results found\n")
