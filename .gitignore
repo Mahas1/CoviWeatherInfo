@@ -131,3 +131,5 @@ dmypy.json
 # logs
 deps_error_log.txt
 deps_install_log.txt
+
+config.json
