@@ -5,7 +5,7 @@ import sys
 import time
 
 import assets
-from scripts import install_dependencies
+from scripts import install_dependencies, weather
 
 if sys.version_info.major < 3 and sys.version_info.minor < 7:
     print(("This program {red}CAN NOT{end} run in Python 3.6 and lower. "
@@ -126,34 +126,49 @@ def clear_screen():
 
 def user_input():
     print("Enter your choice:\n"
-          "1. Test connection speed\n"
-          "2. System Information\n"
-          "3. Add your location to database\n"
-          "4. Remove your location from database\n"
-          "5. Find your location from database\n"
-          "6. Exit")
+          "S. Test connection speed\n"
+          "I. System Information\n"
+          "W. Get weather info\n"
+          "A. Add your location to database\n"
+          "R. Remove your location from database\n"
+          "F. Find your location from database\n"
+          "Q. Exit")
     user_i = input(f"{assets.color_green}> {assets.end_color_formatting}")
-    if user_i == "1":
+    if user_i.lower() == "s":
         clear_screen()
         speed_test()
         user_input()
-    elif user_i == "2":
+    elif user_i.lower() == "i":
         clear_screen()
         hostinfo()
         user_input()
-    elif user_i == "3":
+    elif user_i.lower() == "w":
+        clear_screen()
+        is_stored_in_db = True if input("Press 1 for entering location, and 2 for entering your name: ").lower() == "1" \
+            else False
+        if is_stored_in_db:
+            location = input("Enter your location: ")
+        else:
+            location = sql_functions.retrieve_location()
+        if location:
+            weather.get_embed_from_weather_dict(weather.get_weather_response(location))
+        else:
+            print("Location was not found in database. Aborting...\n")
+        user_input()
+    elif user_i.lower() == "a":
         clear_screen()
         sql_functions.insert_location()
         user_input()
-    elif user_i == "4":
+    elif user_i.lower() == "r":
         clear_screen()
         sql_functions.remove_location()
         user_input()
-    elif user_i == "5":
+    elif user_i.lower() == "f":
         clear_screen()
         sql_functions.retrieve_location()
+        print("\n")
         user_input()
-    elif user_i == "6":
+    elif user_i.lower() == "q":
         exit_program(joke_category=joke_category, joke_text=joke)
     elif user_i == project_config.get("botchat_secret_character"):
         print(f"{assets.color_yellow}You have found BotChat! type \"exit\" to exit.{assets.end_color_formatting}")

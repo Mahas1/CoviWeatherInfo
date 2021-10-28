@@ -26,7 +26,7 @@ except Exception as e:
     print(f"{assets.color_red}COULD NOT CONNECT TO DATABASE. ABORTING...{assets.end_color_formatting}")
     exit(1)
 
-if connection.is_connected():
+if connection and connection.is_connected():
     print("Connected to database successfully!")
 
 cursor = connection.cursor(buffered=True)
@@ -73,5 +73,6 @@ def retrieve_location():
     result = (cursor.fetchall())
     if len(result) > 0:
         print(result[0][0], "\n")
+        return result[0][0]
     else:
         print("No results found\n")

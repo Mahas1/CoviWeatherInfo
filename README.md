@@ -57,8 +57,8 @@ This list is not complete, and will be expanded depending on changes to the scri
 
 # Instructions for use
 
- - Fill out the details in `config.json` (important)
- - `python3 main.py` (may change depending on OS) to run main.py
+- Fill out the details in `config.json` (important)
+- `python3 main.py` (may change depending on OS) to run main.py
 
 # License
 

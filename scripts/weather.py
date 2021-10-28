@@ -1,14 +1,29 @@
 import json
+from urllib.parse import quote as encode
 
 import requests
 
 with open("config.json", "r") as configFile:
     apiKey = json.load(configFile).get("weather_api_key")
 
-url = "https://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={apiKey}".format(cityName="chennai",
+url = "https://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={apiKey}".format(cityName="{cityName}",
                                                                                            apiKey=apiKey)
-with requests.get(url) as response:
-    response = json.loads(response.content)
+
+
+def get_weather_response(location):
+    final_url = url.format(cityName=encode(location))
+    with requests.get(final_url) as response:
+        response = json.loads(response.content)
+    return response
+
+
+def get_country_name(city_name: str):
+    final_url = url.format(cityName=encode(city_name))
+    with requests.get(final_url) as response:
+        response = json.loads(response.content)
+        result = json.loads(response)
+    country_code = result.get("sys").get("country")
+    return country_code
 
 
 def get_embed_from_weather_dict(result: dict):
@@ -27,11 +42,8 @@ def get_embed_from_weather_dict(result: dict):
     name = result.get("name")
 
     print(f"Name - {name} | Country - {country_code}")
-    print(f"Coord - {latitude}, {longitude}")
+    print(f"Coord - {latitude} latitude, {longitude} longitude")
     print(f"Weather - {weather}")
-    print(f"Temp/feelslike - {actual_temp}/{feels_like}")
-    print(f"min/max - {temp_min}/{temp_max}")
-    print(f"Humidity - {humidity}")
-
-
-get_embed_from_weather_dict(response)
+    print(f"Temp/feelslike - {actual_temp}˚C / {feels_like}˚C")
+    print(f"min/max - {temp_min}˚C/{temp_max}˚C")
+    print(f"Humidity - {humidity}%")
