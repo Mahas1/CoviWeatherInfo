@@ -5,7 +5,7 @@ import sys
 import time
 
 import assets
-from scripts import install_dependencies, weather
+from scripts import install_dependencies, weather, covid
 
 if sys.version_info.major < 3 and sys.version_info.minor < 7:
     print(("This program {red}CAN NOT{end} run in Python 3.6 and lower. "
@@ -132,6 +132,7 @@ def user_input():
           "A. Add your location to database\n"
           "R. Remove your location from database\n"
           "F. Find your location from database\n"
+          "C. Get Covid-19 stats for a location\n"
           "Q. Exit")
     user_i = input(f"{assets.color_green}> {assets.end_color_formatting}")
     if user_i.lower() == "s":
@@ -144,7 +145,7 @@ def user_input():
         user_input()
     elif user_i.lower() == "w":
         clear_screen()
-        is_stored_in_db = True if input("Press 1 for entering location, and 2 for entering your name: ").lower() == "1" \
+        is_stored_in_db = True if input("Press 1 for entering location, and 2 for entering your name: ") == "1" \
             else False
         if is_stored_in_db:
             location = input("Enter your location: ")
@@ -167,6 +168,22 @@ def user_input():
         clear_screen()
         sql_functions.retrieve_location()
         print("\n")
+        user_input()
+    elif user_i.lower() == "c":
+        clear_screen()
+        is_stored_in_db = True if input("Press 1 for entering country's name, "
+                                        "and 2 for entering your name: ") == "2" \
+            else False
+        if is_stored_in_db:
+            location = sql_functions.retrieve_location()
+            if location:
+                country = weather.get_country_code(sql_functions.retrieve_location())
+            else:
+                country = None
+        else:
+            country = input("Enter the country's name: ")
+        if country:
+            covid.corona_stats(country)
         user_input()
     elif user_i.lower() == "q":
         exit_program(joke_category=joke_category, joke_text=joke)

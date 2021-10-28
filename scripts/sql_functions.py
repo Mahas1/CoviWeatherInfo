@@ -12,6 +12,8 @@ port = config.get("mysql_hostport")
 username = config.get("mysql_username")
 password = config.get("mysql_password")
 database = config.get("mysql_dbname")
+
+
 try:
     connection = Sql.connect(
         host=host,
@@ -55,24 +57,25 @@ def get_locations():
 def insert_location():
     name = input(f"{assets.color_green}Enter your name: {assets.end_color_formatting}")
     location = input("enter location: ")
-    cursor.execute(f"DELETE FROM locations WHERE name = '{name}'")  # deleting already existing entry
-    cursor.execute(f"INSERT INTO locations VALUES('{name}', '{location}')")
+    cursor.execute(f"DELETE FROM locations WHERE name = '{name}';")  # deleting already existing entry
+    cursor.execute(f"INSERT INTO locations VALUES('{name}', '{location}');")
     print(f"{assets.color_green}Done!\n{assets.end_color_formatting}")
 
 
 def remove_location():
     name = input(f"{assets.color_green}Enter your name: {assets.end_color_formatting}")
-    cursor.execute(f"DELETE FROM locations WHERE name = '{name}'")
+    cursor.execute(f"DELETE FROM locations WHERE name = '{name}';")
     print(f"{assets.color_green}Done!\n{assets.end_color_formatting}")
 
 
 def retrieve_location():
     name = input(f"{assets.color_green}Enter your name: {assets.end_color_formatting}")
     print("\n")
-    cursor.execute(f"SELECT location FROM locations WHERE name = '{name}'")
+    cursor.execute(f"SELECT location FROM locations WHERE name = '{name}';")
     result = (cursor.fetchall())
     if len(result) > 0:
         print(result[0][0], "\n")
         return result[0][0]
     else:
         print("No results found\n")
+        return None

@@ -17,7 +17,7 @@ def get_weather_response(location):
     return response
 
 
-def get_country_name(city_name: str):
+def get_country_code(city_name: str):
     final_url = url.format(cityName=encode(city_name))
     with requests.get(final_url) as response:
         response = json.loads(response.content)
@@ -47,3 +47,4 @@ def get_embed_from_weather_dict(result: dict):
     print(f"Temp/feelslike - {actual_temp}˚C / {feels_like}˚C")
     print(f"min/max - {temp_min}˚C/{temp_max}˚C")
     print(f"Humidity - {humidity}%")
+    print("\n")
