@@ -10,8 +10,6 @@ class Sql:
         self.database = database
         self.connect()
         self.create_table()
-        self.get_locations()
-
 
     def connect(self):
         try:
@@ -63,6 +61,6 @@ class Sql:
 
     def remove_location(self, name):
         try:
-            self.cursor.execute(f"DELETE FROM locations WHERE name='{name}'")
+            self.cursor.execute(f"DELETE FROM {self.database}.locations WHERE name='{name}'")
         except Exception as e:
             raise e
