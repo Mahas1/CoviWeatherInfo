@@ -1,6 +1,0 @@
-requests
-googletrans~=3.1.0a0
-speedtest-cli
-psutil
-python-aiml
-mysql-connector-python
