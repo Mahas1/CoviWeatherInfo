@@ -10,6 +10,9 @@
 """
 
 import json
+
+import pymysql
+
 from scripts import sql
 
 if not __name__ == "__main__":
@@ -26,6 +29,9 @@ with open("mysql_config.json", "r") as sql_config:
 try:
     database = sql.Sql(sql_host, sql_port, sql_user, sql_pass, sql_db)
 except Exception as e:
+    if isinstance(e, pymysql.OperationalError):
+        print("Connection to database failed. Aborting...")
+        exit()
     raise e
 
 print(database.get_locations())

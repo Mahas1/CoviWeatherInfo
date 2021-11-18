@@ -10,10 +10,8 @@ class Sql:
         self.database = database
         self.connect()
         self.create_table()
-        try:
-            self.get_locations()
-        except:
-            pass
+        self.get_locations()
+
 
     def connect(self):
         try:
