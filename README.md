@@ -48,18 +48,6 @@ This project aims to use the following dependencies
 
 This list is not complete, and will be expanded depending on changes to the script(s) and their implementation.
 
-# So what can it do as of now?
-
-- It can tell you a joke.
-- Show you your system info
-- test internet speed
-- Easter egg - Check `config.json`
-
-# Instructions for use
-
-- Fill out the details in `config.json` (important)
-- `python3 main.py` (may change depending on OS) to run main.py
-
 # License
 
 This project is covered under the MIT License. For more information, refer [here](./LICENSE).
