@@ -25,13 +25,6 @@ To make an effective piece of software that can provide weather and Covid-19 inf
 - Any distro that can run Python (Most distros can), and can connect to the internet.
 - This software will be tested on Ubuntu using WSL2
 
-## iOS
-
-- Any jailbroken version of iOS or iPadOS that has the Python Cydia Tweak installed, and can connect to the internet.
-- Python 3.7+ is recommended
-- This software will be tested on an iPad4,1 (iPad Air1) running iOS 12.5, jailbroken using unc0ver.
-- UPDATE: This will not be tested on iOS, because yes.
-
 # Project Description
 
 Upon entering a user's name or a location, the program will attempt to get weather information, as well as recent
