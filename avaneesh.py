@@ -1,4 +1,5 @@
 import speedtest
+import karchick
 
 
 def test_speed():
@@ -12,13 +13,11 @@ def test_speed():
 Choice(1/2/3):"""))
         if choice == 1:
             print('Counting...')
-            print("Download speed:{:.2f} Mb/s".format(speed.download() / 1024 / 1024))
+            print(karchick.colour_cyan("Download speed:{:.2f} Mb/s".format(speed.download() / 1024 / 1024)))
         elif choice == 2:
             print('Counting...')
-            print("Upload speed:{:.2f} Mb/s".format(speed.upload() / 1024 / 1024))
+            print(karchick.colour_cyan("Upload speed:{:.2f} Mb/s".format(speed.upload() / 1024 / 1024)))
         elif choice == 3:
-            print('Exiting the program')
             return
         else:
-            print("Please choose the right option")
-
+            print(karchick.colour_red("Please choose the right option"))

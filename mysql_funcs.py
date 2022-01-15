@@ -7,8 +7,7 @@ connection = mysql.connect(
     database="coviweatherinfo"
 )
 
-cursor = connection.cursor()
-
+cursor = connection.cursor(buffered=True)
 """Database Schema
 Table: covid
 Columns:
@@ -22,6 +21,14 @@ Columns:
 """
 
 
+def check_connection():
+    try:
+        connection.ping()
+        print("Connection is alive!")
+    except mysql.Error:
+        print("Connection is dead!")
+
+
 def create_tables():
     cursor.execute("CREATE TABLE IF NOT EXISTS covid(name VARCHAR(255), location VARCHAR(255))")
     cursor.execute("CREATE TABLE IF NOT EXISTS weather(name VARCHAR(255), city VARCHAR(255))")
@@ -31,7 +38,12 @@ def create_tables():
 def add_covid_location():
     name = input("Enter name: ")
     location = input("Enter location: ")
-    cursor.execute("INSERT INTO covid VALUES(%s,%s)", (name, location))
+    cursor.execute("SELECT * FROM covid WHERE name=%s", (name,))
+    result = cursor.fetchone()
+    if result != () and result is not None:
+        cursor.execute("UPDATE covid SET location=%s WHERE name=%s", (location, name))
+    else:
+        cursor.execute("INSERT INTO covid VALUES(%s,%s)", (name, location))
     connection.commit()
 
 
@@ -46,6 +58,34 @@ def fetch_covid_location():
     cursor.execute("SELECT * FROM covid WHERE name=%s", (name,))
     result = cursor.fetchone()
     if result != () and result is not None:
-        print(result[1])
+        return result[1]
+    else:
+        print("No record found!")
+
+
+def add_weather_location():
+    name = input("Enter name: ")
+    city = input("Enter city: ")
+    cursor.execute("SELECT * FROM weather WHERE name=%s", (name,))
+    result = cursor.fetchone()
+    if result != () and result is not None:
+        cursor.execute("UPDATE weather SET city=%s WHERE name=%s", (city, name))
+    else:
+        cursor.execute("INSERT INTO weather VALUES(%s,%s)", (name, city))
+    connection.commit()
+
+
+def remove_weather_location():
+    name = input("Enter name: ")
+    cursor.execute("DELETE FROM weather WHERE name=%s", (name,))
+    connection.commit()
+
+
+def fetch_weather_location():
+    name = input("Enter name: ")
+    cursor.execute("SELECT * FROM weather WHERE name=%s", (name,))
+    result = cursor.fetchone()
+    if result != () and result is not None:
+        return result[1]
     else:
         print("No record found!")

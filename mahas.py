@@ -1,7 +1,8 @@
-"""Make sure to enter the API Key before running the script."""
-weather_api_key = ""
-
 import requests
+
+weather_api_key = ""
+if weather_api_key == "":
+    weather_api_key = input("Enter your weather API key: ")
 
 
 def get_covid_stats(country):
@@ -49,6 +50,12 @@ def get_covid_stats(country):
 def get_weather_info(city):
     weather_url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={weather_api_key}"
     result = requests.get(weather_url).json()
+    if result.get("cod") == 404:
+        print("City not found.")
+        return
+    if result.get("cod") == 401:
+        print("Invalid API Key.")
+        return
     longitude = result.get("coord").get('lon')
     latitude = result.get("coord").get('lat')
 
