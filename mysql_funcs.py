@@ -1,10 +1,13 @@
 import mysql.connector as mysql
-
+host = input("Enter the MySql host: ")
+user = input("Enter the MySql user: ")
+passwd = input("Enter the MySql password: ")
+db = input("Enter the MySql database: ")
 connection = mysql.connect(
-    host="localhost",
-    user="root",
-    passwd="Maha2021$",
-    database="coviweatherinfo"
+    host=host,
+    user=user,
+    passwd=passwd,
+    database=db
 )
 
 cursor = connection.cursor(buffered=True)
